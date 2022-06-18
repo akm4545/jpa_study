@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -20,7 +22,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "ORDERS")
-public class Order {
+public class Order extends BaseEntity{
 	
 	@Id 
 	@GeneratedValue
@@ -31,18 +33,27 @@ public class Order {
 	//제네릭 타입 오더 아이템을 찾은 뒤 
 	//대상 테이블과 오더 필드를 찾고 
 	//조인 컬럼을 확인 후 다시 돌아와 Order에 선언된 컬럼 아이디를 기준으로 쿼리를 생성하여 가져오는듯함
-	@OneToMany(mappedBy = "order") // 필드 이름
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // 필드 이름
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 	
 	//연관관계의 주인 - 외래키 소유 O
 	//Get Member 시 member_id로 조인하여 가져옴
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	//지연 로딩 방식으로 사용 
+	//oneToMany, ManyToMany 는 기본값이 지연로딩 
+	//다량의 정보가 방대할 수 있으므로 지연로딩이 기본값인게 성능 최적화 부분에서 맞음	
 	@JoinColumn(name = "MEMBER_ID") //컬럼 이름
 	private Member member;
 	
 	//일대일 관계 
 	//관계의 주인 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//지연로딩 방식을 사용함
+	//CRUD 모든 경우에 영속성 전이를 사용
+	//영속성 전이를 사용하여 Order를 DB에 저장할때 
+	//연관관계의 값을 담고 order만 컨텍스트에 올린 후 
+	//플러시 하면 Cascade가 설정된 관계는 자동으로 영속성이 전이되고 
+	//DB 작업
 	@JoinColumn(name = "DELIVERY_ID")
 	private Delivery delivery;
 	

@@ -1,16 +1,27 @@
-package com.jap_study_shop.model.entity;
+package com.jap_study_shop.model.entity.item;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 
+import com.jap_study_shop.model.entity.BaseEntity;
+import com.jap_study_shop.model.entity.Category;
+
 @Entity
-public class Item {
+//상속관계 정의 - 단일 테이블 전략
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//상속 종류를 결정하는 컬럼명 지정
+@DiscriminatorColumn(name = "DTYPE")
+//직접 사용하지 않고 상속받아 사용하므로 추상 클래스 선언
+public abstract class Item extends BaseEntity{ 
 	
 	@Id
 	@GeneratedValue

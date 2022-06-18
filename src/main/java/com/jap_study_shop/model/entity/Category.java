@@ -13,8 +13,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.jap_study_shop.model.entity.item.Item;
+
 @Entity
-public class Category {
+public class Category extends BaseEntity{
 	
 	@Id
 	@GeneratedValue
