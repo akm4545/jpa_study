@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,6 +39,12 @@ public class Order {
 	@ManyToOne
 	@JoinColumn(name = "MEMBER_ID") //컬럼 이름
 	private Member member;
+	
+	//일대일 관계 
+	//관계의 주인 
+	@OneToOne
+	@JoinColumn(name = "DELIVERY_ID")
+	private Delivery delivery;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDate;
@@ -102,6 +109,18 @@ public class Order {
 	public void addOrderItem(OrderItem orderItem) {
 		orderItems.add(orderItem);
 		orderItem.setOrder(this);
+	}
+
+	public Delivery getDelivery() {
+		return delivery;
+	}
+
+	//양방향 관계 설정
+	//배송지 정보를 입력하면 
+	//배송지에도 주문 정보가 세팅됨
+	public void setDelivery(Delivery delivery) {
+		this.delivery = delivery;
+		delivery.setOrder(this);
 	}
 }
 
