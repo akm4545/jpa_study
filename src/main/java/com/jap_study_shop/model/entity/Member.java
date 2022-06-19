@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,11 +20,19 @@ public class Member extends BaseEntity{
 	
 	private String name;
 	
-	private String city;
-
-	private String street;
+	//값 타입을 사용하므로 불필요 필드
+//	private String city;
+//
+//	private String street;
+//	
+//	private String zipcode;
 	
-	private String zipcode;
+	//값 타입 사용시 선언 (사용하는 부분)
+	//결과적으로는 위와 똑같은 코드임
+	//값타입 컬렉션의 경우 OneToMany와 똑같이 작동
+	//엔티티 = 식별자가 필요, 지속해서 값을 구분하고 변경해야 하는 경우
+	@Embedded
+	private Address address;
 	
 	@OneToMany(mappedBy = "member")
 	private List<Order> orders = new ArrayList<Order>();
@@ -42,30 +51,6 @@ public class Member extends BaseEntity{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getZipcode() {
-		return zipcode;
-	}
-
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
 	}
 
 	public List<Order> getOrders() {
